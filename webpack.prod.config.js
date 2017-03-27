@@ -14,13 +14,13 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
         use: [
           {
             loader: 'babel-loader',
             options: {
-              presets: ['env']
+              presets: ['es2015', 'react']
             }
           }
         ]

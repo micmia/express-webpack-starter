@@ -15,13 +15,13 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
         use: [
           {
             loader: 'babel-loader',
             options: {
-              presets: ['env']
+              presets: ['es2015', 'react']
             }
           }
         ]
@@ -56,7 +56,7 @@ module.exports = {
   },
   plugins: [
     new ExtractTextPlugin({
-      filename: 'css/[name].min.css',
+      filename: 'css/[name].css',
       allChunks: true,
       disable: true
     }),
