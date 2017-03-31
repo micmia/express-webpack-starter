@@ -6,13 +6,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var app = express();
+var mongoose = require('mongoose');
 
 if (process.env.NODE_ENV == 'development') {
   var browserSync = require('browser-sync');
   var webpack = require('webpack');
   var webpackDevMiddleware = require('webpack-dev-middleware');
   var webpackHotMiddleware = require('webpack-hot-middleware');
-  var webpackConfig = require('./webpack.dev.config');
+  var webpackConfig = require('./../webpack.dev.config.js');
   var compiler = webpack(webpackConfig);
 
   app.use(webpackDevMiddleware(compiler, {
@@ -23,22 +24,40 @@ if (process.env.NODE_ENV == 'development') {
   app.use(webpackHotMiddleware(compiler));
 }
 
+mongoose.connect('mongodb://192.168.33.10/db', {socketOptions: {keepAlive: 1}});
+
 // view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/../public')));
 
-app.use('/api', require('./routes/api'));
+app.use('/api', require('./routes/api/index'));
+app.use('/api/*', function (req, res, next) {
+  res.json({error: {code: 1}});
+});
 
-app.route('*').get((req, res) => {
-  res.sendFile('public/index.html', {root: __dirname});
+app.route('*').get((req, res, next) => {
+  if (process.env.NODE_ENV == 'development') {
+    var filename = path.join(compiler.outputPath, '/../', 'index.html');
+
+    compiler.outputFileSystem.readFile(filename, function (err, result) {
+      if (err) {
+        return next(err);
+      }
+      res.set('content-type', 'text/html');
+      res.send(result);
+      res.end();
+    });
+  } else {
+    res.sendFile('public/index.html', {root: __dirname + '/../'});
+  }
 });
 
 // error handler

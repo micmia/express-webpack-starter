@@ -1,11 +1,12 @@
 var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
   entry: {
-    index: ['./app/components/index', 'webpack-hot-middleware/client', 'webpack/hot/dev-server']
+    bundle: ['./app/index', 'webpack-hot-middleware/client', 'webpack/hot/dev-server']
   },
   output: {
     filename: 'js/[name].js',
@@ -15,13 +16,17 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /.(pug|jade)$/,
+        use: 'pug-loader'
+      },
+      {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
         use: [
           {
             loader: 'babel-loader',
             options: {
-              presets: ['es2015', 'react']
+              presets: ['es2017', 'react']
             }
           }
         ]
@@ -34,7 +39,8 @@ module.exports = {
             {
               loader: 'css-loader',
               options: {
-                sourceMap: true
+                sourceMap: true,
+                localIdentName: '[hash:base64:5]'
               }
             }, {
               loader: 'sass-loader',
@@ -60,6 +66,11 @@ module.exports = {
       allChunks: true,
       disable: true
     }),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({
+      filename: '../index.html',
+      template: 'app/index.pug',
+      hash: true
+    })
   ]
 };

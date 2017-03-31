@@ -1,10 +1,11 @@
 var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    index: ['./app/components/index']
+    bundle: ['./app/index']
   },
   output: {
     filename: 'js/[name].js',
@@ -13,6 +14,10 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /.(pug|jade)$/,
+        use: 'pug-loader'
+      },
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
@@ -46,6 +51,11 @@ module.exports = {
     new ExtractTextPlugin({
       filename: 'css/[name].css',
       allChunks: true
+    }),
+    new HtmlWebpackPlugin({
+      filename: '../index.html',
+      template: 'app/index.pug',
+      hash: true
     })
   ]
 };
