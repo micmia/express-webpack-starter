@@ -6,7 +6,7 @@ import {IntlProvider, FormattedMessage, addLocaleData} from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import fr from 'react-intl/locale-data/fr';
 import localeData from './locales';
-import './fonts/FontAwesome.scss';
+import 'font-awesome/scss/font-awesome.scss';
 import './index.scss';
 import HomeComponent from './components/Home';
 import StoriesContainer from './containers/Stories';
@@ -47,7 +47,7 @@ ReactDOM.render(
             </ul>
           </div>
         </nav>
-        <div className="container">
+        <div className="container main">
           <Route exact path="/" component={HomeComponent}></Route>
           <Route path="/stories" component={StoriesContainer}></Route>
         </div>

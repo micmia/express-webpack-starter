@@ -26,46 +26,40 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              presets: ['es2017', 'react']
+              presets: ['es2015', 'react']
             }
           }
         ]
       },
       {
         test: /\.scss$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                sourceMap: true,
-                localIdentName: '[hash:base64:5]'
-              }
-            }, {
-              loader: 'sass-loader',
-              options: {
-                sourceMap: true
-              }
-            }]
-        })
+        use: [
+          {
+            loader: 'style-loader'
+          }, {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+              localIdentName: '[hash:base64:5]'
+            }
+          }, {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true
+            }
+          }]
       },
       {
-        test: /\.(jpe?g|png|gif|svg)$/i,
+        test: /\.(jpe?g|png|gif)$/i,
         use: 'file-loader?name=[hash].[ext]&publicPath=/assets/images/&outputPath=images/'
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2)$/,
-        use: 'file-loader?name=[name].[ext]&publicPath=/assets/fonts/&outputPath=fonts/'
+        test: /\.(otf|eot|svg|ttf|woff|woff2)$/,
+        use: 'file-loader?name=[name].[ext]&publicPath=http://localhost:8080/assets/fonts/&outputPath=fonts/'
       }
     ]
   },
   plugins: [
-    new ExtractTextPlugin({
-      filename: 'css/[name].css',
-      allChunks: true,
-      disable: true
-    }),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       filename: '../index.html',

@@ -31,14 +31,20 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, '/../public', 'favicon.png')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '/../public')));
 
-app.use('/api', require('./routes/api/index'));
+if (process.env.NODE_ENV == 'development') {
+  // avoid index.html conflict
+  app.use('/assets', express.static(path.join(__dirname, '/../public/assets')));
+} else {
+  app.use(express.static(path.join(__dirname, '/../public')));
+}
+
+app.use('/api', require('./routes/api'));
 app.use('/api/*', function (req, res, next) {
   res.json({error: {code: 1}});
 });
@@ -47,12 +53,13 @@ app.route('*').get((req, res, next) => {
   if (process.env.NODE_ENV == 'development') {
     var filename = path.join(compiler.outputPath, '/../', 'index.html');
 
-    compiler.outputFileSystem.readFile(filename, function (err, result) {
+    compiler.outputFileSystem.readFile(filename, function (err, content) {
       if (err) {
         return next(err);
       }
+
       res.set('content-type', 'text/html');
-      res.send(result);
+      res.send(content);
       res.end();
     });
   } else {
