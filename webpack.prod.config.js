@@ -38,11 +38,11 @@ module.exports = {
         })
       },
       {
-        test: /\.(jpe?g|png|gif|svg)$/i,
+        test: /\.(jpe?g|png|gif)$/i,
         use: 'file-loader?name=[hash].[ext]&publicPath=/assets/images/&outputPath=images/'
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        test: /\.(otf|eot|svg|ttf|woff|woff2)$/,
         use: 'file-loader?name=[name].[ext]&publicPath=/assets/fonts/&outputPath=fonts/'
       }
     ]

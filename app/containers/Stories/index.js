@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {List} from 'immutable';
+import classNames from 'classnames';
+import styles from './styles.scss';
 
 export default class StoriesContainer extends Component {
   constructor(props) {
@@ -10,38 +12,29 @@ export default class StoriesContainer extends Component {
     };
 
     this.deleteStory = this.deleteStory.bind(this);
+    this.getStories = this.getStories.bind(this);
   }
 
   componentDidMount() {
-    // (async() => {
-    //   try {
-    //     const res = await fetch('/api/stories');
-    //     const data = await res.json();
-    //
-    //     this.setState(({stories}) => ({
-    //       stories: List(data)
-    //     }));
-    //   } catch (e) {
-    //
-    //   }
-    // })();
+    this.getStories();
+  }
+
+  getStories() {
+    fetch('/api/stories').then(res => res.json()).then(data => {
+      this.setState(({stories}) => ({stories: List(data)}));
+      this.props._parent.setState(Object.assign({}, this.props.state, {storiesCount: data.length}));
+    });
   }
 
   deleteStory(id) {
-    //   (async() => {
-    //     try {
-    //       const res = await fetch(`/api/stories/${id}`, {method: 'DELETE'});
-    //       const data = await res.json();
-    //
-    //       this.setState({stories: this.state.stories.filter(s => s._id !== id)});
-    //     } catch (e) {
-    //
-    //     }
-    //   })();
+    fetch(`/api/stories/${id}`, {method: 'DELETE'}).then(res => res.json()).then(data => {
+      this.setState({stories: this.state.stories.filter(s => s._id !== id)});
+      this.getStories();
+    });
   }
 
   render() {
-    const styles = {
+    const _styles = {
       card: {
         marginBottom: 10
       }
@@ -50,7 +43,7 @@ export default class StoriesContainer extends Component {
     return (
       <div className="row">
         {this.state.stories.map(story =>
-          <div className="col-sm-6" key={story._id} style={styles.card} data-id={story._id}>
+          <div className="col-sm-6" key={story._id} style={_styles.card} data-id={story._id}>
             <div className="card">
               <div className="card-block">
                 <h4 className="card-title">{story.name}</h4>
@@ -60,10 +53,10 @@ export default class StoriesContainer extends Component {
             </div>
           </div>
         )}
-        <div className="col-sm-6" style={styles.card}>
-          <div className="card" style={{height: '100%'}}>
+        <div className="col-sm-6" style={_styles.card}>
+          <div className={classNames('card', styles.new)} style={{padding: '10px 0'}}>
             <div className="card-block" style={{textAlign: 'center'}}>
-              <i className="fa fa-plus" aria-hidden="true"></i>
+              <i className="fa fa-plus" aria-hidden="true" style={{fontSize: '1.5rem'}}></i>
             </div>
           </div>
         </div>
