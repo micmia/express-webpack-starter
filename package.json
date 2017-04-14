@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=development nodemon --harmony --watch ./server/routes --watch ./server/models ./server/bin/www & sleep 3 && browser-sync start --port 8080 --reload-delay 5000 -p \"localhost:3000\" -f \"./server/routes/**\"",
+    "start": "NODE_ENV=development nodemon --harmony --watch ./server/routes --watch ./server/models ./server/bin/www & sleep 5 && browser-sync start --port 8080 --reload-delay 5000 -p \"localhost:3000\" -f \"./server/routes/**\"",
     "build": "webpack --env=prod --progress --profile --colors -p"
   },
   "dependencies": {

@@ -2,13 +2,15 @@ import React, {Component} from 'react';
 import {List} from 'immutable';
 import classNames from 'classnames';
 import styles from './styles.scss';
+import StoryModal from '../../components/StoryModal';
 
 export default class StoriesContainer extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      stories: List()
+      stories: List(),
+      selectedStory: {}
     };
 
     this.deleteStory = this.deleteStory.bind(this);
@@ -33,6 +35,11 @@ export default class StoriesContainer extends Component {
     });
   }
 
+  updateStory(i) {
+    this.setState({selectedStory: this.state.stories.get(i)});
+    this.storyModal.toggle();
+  }
+
   render() {
     const _styles = {
       card: {
@@ -40,15 +47,19 @@ export default class StoriesContainer extends Component {
       }
     };
 
+    const {stories, selectedStory} = this.state;
+
     return (
       <div className="row">
-        {this.state.stories.map(story =>
+        {stories.map((story, i) =>
           <div className="col-sm-6" key={story._id} style={_styles.card} data-id={story._id}>
             <div className="card">
               <div className="card-block">
-                <h4 className="card-title">{story.name}</h4>
+                <h4 className="card-title">{story.title}</h4>
                 <p className="card-text">{story.description}</p>
-                <a href="#" className="btn btn-danger" onClick={() => this.deleteStory(story._id)}>Delete</a>
+                <button className="btn btn-success" onClick={() => this.updateStory(i)}>Edit</button>
+                &nbsp;
+                <button className="btn btn-danger" onClick={() => this.deleteStory(story._id)}>Delete</button>
               </div>
             </div>
           </div>
@@ -60,6 +71,9 @@ export default class StoriesContainer extends Component {
             </div>
           </div>
         </div>
+        <StoryModal story={selectedStory} ref={modal => {
+          this.storyModal = modal;
+        }}/>
       </div>
     );
   }
