@@ -10,4 +10,6 @@ const StorySchema = new Schema({
   description: String
 });
 
+StorySchema.statics.fillable = ['title', 'description'];
+
 module.exports = mongoose.model('Story', StorySchema);

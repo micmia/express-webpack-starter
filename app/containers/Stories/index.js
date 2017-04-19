@@ -13,8 +13,10 @@ export default class StoriesContainer extends Component {
       selectedStory: {}
     };
 
-    this.deleteStory = this.deleteStory.bind(this);
     this.getStories = this.getStories.bind(this);
+    this.deleteStory = this.deleteStory.bind(this);
+    this.createStory = this.createStory.bind(this);
+    this.handleSaveStory = this.handleSaveStory.bind(this);
   }
 
   componentDidMount() {
@@ -37,7 +39,34 @@ export default class StoriesContainer extends Component {
 
   updateStory(i) {
     this.setState({selectedStory: this.state.stories.get(i)});
-    this.storyModal.toggle();
+    $(this.modal.element).modal();
+  }
+
+  createStory() {
+    this.setState({selectedStory: {_id: '', title: '', description: ''}});
+    $(this.modal.element).modal();
+  }
+
+  handleSaveStory(story) {
+    if (story.hasOwnProperty('_id')) {
+      fetch(`/api/stories/${story._id}`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(story)
+      }).then(res => res.json()).then(data => {
+        this.getStories();
+        $(this.modal.element).modal('toggle');
+      });
+    } else {
+      fetch(`/api/stories`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(story)
+      }).then(res => res.json()).then(data => {
+        this.getStories();
+        $(this.modal.element).modal('toggle');
+      });
+    }
   }
 
   render() {
@@ -51,6 +80,13 @@ export default class StoriesContainer extends Component {
 
     return (
       <div className="row">
+        <div className="col-sm-12" style={_styles.card}>
+          <div className={classNames('card', styles.new)} style={{padding: '10px 0'}}>
+            <div className="card-block" style={{textAlign: 'center'}} onClick={this.createStory}>
+              <i className="fa fa-plus" aria-hidden="true" style={{fontSize: '1.5rem'}}></i>
+            </div>
+          </div>
+        </div>
         {stories.map((story, i) =>
           <div className="col-sm-6" key={story._id} style={_styles.card} data-id={story._id}>
             <div className="card">
@@ -64,15 +100,8 @@ export default class StoriesContainer extends Component {
             </div>
           </div>
         )}
-        <div className="col-sm-6" style={_styles.card}>
-          <div className={classNames('card', styles.new)} style={{padding: '10px 0'}}>
-            <div className="card-block" style={{textAlign: 'center'}}>
-              <i className="fa fa-plus" aria-hidden="true" style={{fontSize: '1.5rem'}}></i>
-            </div>
-          </div>
-        </div>
-        <StoryModal story={selectedStory} ref={modal => {
-          this.storyModal = modal;
+        <StoryModal {...selectedStory} onSave={this.handleSaveStory} ref={comp => {
+          this.modal = comp;
         }}/>
       </div>
     );
