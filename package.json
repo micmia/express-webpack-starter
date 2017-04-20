@@ -15,6 +15,10 @@
     "mongoose": "^4.9.2",
     "morgan": "~1.7.0",
     "pug": "^2.0.0-beta11",
+    "react-redux": "^5.0.4",
+    "redux": "^3.6.0",
+    "redux-immutable": "^4.0.0",
+    "redux-thunk": "^2.2.0",
     "serve-favicon": "~2.3.2"
   },
   "devDependencies": {
@@ -39,6 +43,7 @@
     "react-intl": "^2.2.3",
     "react-router": "^4.0.0",
     "react-router-dom": "^4.0.0",
+    "redux": "^3.6.0",
     "reload": "^1.1.1",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.13.2",
