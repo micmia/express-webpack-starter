@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import {FormattedMessage} from 'react-intl';
 import {Field, reduxForm} from 'redux-form/immutable';
 import * as storiesActionCreators from '../../actions/stories';
 
@@ -29,8 +30,12 @@ class Modal extends PureComponent {
                 <Field name="description" className="form-control" component="textarea" rows="5"/>
               </div>
               <div className="modal-footer">
-                <button type="submit" className="btn btn-primary" disabled={submitting}>Save changes</button>
-                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" className="btn btn-primary" disabled={submitting}>
+                  <FormattedMessage id="stories.modal.save"/>
+                </button>
+                <button type="button" className="btn btn-secondary" data-dismiss="modal">
+                  <FormattedMessage id="stories.modal.close"/>
+                </button>
               </div>
             </form>
           </div>

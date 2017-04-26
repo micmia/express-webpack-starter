@@ -1,5 +1,9 @@
 {
   "app.nav.home": "Home",
   "app.nav.stories": "Histoires",
-  "app.nav.about": "À propos"
+  "app.nav.about": "À propos",
+  "stories.card.edit": "Modifier",
+  "stories.card.delete": "Supprimer",
+  "stories.modal.save": "Sauvegarder",
+  "stories.modal.close": "Fermer"
 }

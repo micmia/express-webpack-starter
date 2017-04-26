@@ -1,5 +1,9 @@
 {
   "app.nav.home": "Home",
   "app.nav.stories": "Stories",
-  "app.nav.about": "About"
+  "app.nav.about": "About",
+  "stories.card.edit": "Edit",
+  "stories.card.delete": "Delete",
+  "stories.modal.save": "Save changes",
+  "stories.modal.close": "Close"
 }

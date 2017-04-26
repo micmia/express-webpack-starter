@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
+import {FormattedMessage} from 'react-intl';
 import * as storiesActionCreators from '../../actions/stories';
 import styles from './styles.scss';
 import Modal from './Modal';
@@ -70,9 +71,13 @@ class Stories extends PureComponent {
               <div className="card-block">
                 <h4 className="card-title">{story.get('title')}</h4>
                 <p className="card-text">{story.get('description')}</p>
-                <button className="btn btn-success" onClick={() => this.handleEdit(i)}>Edit</button>
+                <button className="btn btn-success" onClick={() => this.handleEdit(i)}>
+                  <FormattedMessage id="stories.card.edit"/>
+                </button>
                 &nbsp;
-                <button className="btn btn-danger" onClick={() => this.handleDelete(story.get('_id'))}>Delete</button>
+                <button className="btn btn-danger" onClick={() => this.handleDelete(story.get('_id'))}>
+                  <FormattedMessage id="stories.card.delete"/>
+                </button>
               </div>
             </div>
           </div>
