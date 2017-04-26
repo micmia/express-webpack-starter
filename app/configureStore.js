@@ -5,11 +5,11 @@ import Immutable from 'immutable';
 import rootReducer from './reducers';
 
 const loggerMiddleware = createLogger();
-const initialState = Immutable.Map();
+// const initialState = Immutable.Map();
 
 export default createStore(
   rootReducer,
-  initialState,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   applyMiddleware(
     thunkMiddleware,
     loggerMiddleware

@@ -6,6 +6,7 @@ import {FormattedMessage} from 'react-intl';
 import * as storiesActionCreators from '../../actions/stories';
 import styles from './styles.scss';
 import Modal from './Modal';
+import {CREATE_STORY_SUCCESS, UPDATE_STORY_SUCCESS} from '../../constants/stories';
 
 class Stories extends PureComponent {
   constructor(props) {
@@ -27,9 +28,12 @@ class Stories extends PureComponent {
     const {storiesActions} = this.props;
     const save = storiesActions[story.get('_id') ? 'updateStory' : 'createStory'];
 
-    save(story.toJS()).then(function () {
+    save(story.toJS()).then(function (action) {
+      if (action.type === CREATE_STORY_SUCCESS || action.type === UPDATE_STORY_SUCCESS) {
+        storiesActions.getStories();
+      }
+
       $('#editStoryModal').modal('hide');
-      storiesActions.getStories();
     });
   }
 

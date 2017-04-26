@@ -16,7 +16,7 @@ export default (state = initialState, action) => {
     case GET_STORIES_SUCCESS:
       return state.merge({
         items: action.payload,
-        count: action.payload.length
+        count: action.payload.count()
       });
 
     case GET_STORIES_FAILURE:

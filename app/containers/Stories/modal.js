@@ -58,6 +58,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps, null, {withRef: true})(reduxForm({
-  form: 'modal',
+  form: 'editStoryModal',
   enableReinitialize: true
 })(Modal));

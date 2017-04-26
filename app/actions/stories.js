@@ -53,7 +53,7 @@ export function updateStory(story) {
       })
       .catch((err) => {
         console.log(err);
-        dispatch({type: UPDATE_STORY_FAILURE});
+        return dispatch({type: UPDATE_STORY_FAILURE});
       });
   }
 }
@@ -73,7 +73,7 @@ export function createStory(story) {
       })
       .catch((err) => {
         console.log(err);
-        dispatch({type: CREATE_STORY_FAILURE});
+        return dispatch({type: CREATE_STORY_FAILURE});
       });
   }
 }
@@ -89,7 +89,7 @@ export function deleteStory(id) {
       })
       .catch((err) => {
         console.log(err);
-        dispatch({type: DELETE_STORY_FAILURE});
+        return dispatch({type: DELETE_STORY_FAILURE});
       });
   }
 }
