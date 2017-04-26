@@ -1,4 +1,4 @@
 import {connect} from 'react-redux';
-import HomeComponent from '../../components/Home';
+import Home from '../../components/Home';
 
-export default connect()(HomeComponent);
+export default connect()(Home);

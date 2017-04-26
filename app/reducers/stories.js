@@ -1,13 +1,14 @@
 import Immutable from 'immutable';
 import {
   GET_STORIES_SUCCESS,
-  GET_STORIES_FAILURE
+  GET_STORIES_FAILURE,
+  EDIT_STORY
 } from '../constants/stories';
 
 const initialState = Immutable.fromJS({
   items: [],
-  itemToEdit: -1,
-  count: 0
+  itemToEdit: null,
+  count: 0,
 });
 
 export default (state = initialState, action) => {
@@ -18,9 +19,11 @@ export default (state = initialState, action) => {
         count: action.payload.length
       });
 
-    case GET_STORIES_FAILURE: {
+    case GET_STORIES_FAILURE:
       return state.clear();
-    }
+
+    case EDIT_STORY:
+      return state.set('itemToEdit', action.payload);
 
     default:
       return state;
