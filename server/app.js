@@ -1,4 +1,5 @@
 var express = require('express');
+var session = require('express-session');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -9,7 +10,6 @@ var app = express();
 var mongoose = require('mongoose');
 
 if (process.env.NODE_ENV == 'development') {
-  var browserSync = require('browser-sync');
   var webpack = require('webpack');
   var webpackDevMiddleware = require('webpack-dev-middleware');
   var webpackHotMiddleware = require('webpack-hot-middleware');
@@ -25,6 +25,9 @@ if (process.env.NODE_ENV == 'development') {
 }
 
 mongoose.connect('mongodb://192.168.33.10/db', {socketOptions: {keepAlive: 1}});
+
+// session
+app.use(session({name: 'rsid', secret: 'RCygPWomeAgBLYX3', resave: true, saveUninitialized: true}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

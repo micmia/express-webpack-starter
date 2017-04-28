@@ -55,7 +55,7 @@ module.exports = {
       },
       {
         test: /\.(otf|eot|svg|ttf|woff|woff2)$/,
-        use: 'file-loader?name=[name].[ext]&publicPath=http://localhost:8080/assets/fonts/&outputPath=fonts/'
+        use: 'file-loader?name=[name].[ext]&publicPath=http://localhost:3000/assets/fonts/&outputPath=fonts/'
       }
     ]
   },
