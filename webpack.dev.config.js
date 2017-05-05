@@ -9,9 +9,10 @@ module.exports = {
     bundle: ['./app/index', 'webpack-hot-middleware/client', 'webpack/hot/dev-server']
   },
   output: {
-    filename: 'js/[name].js',
+    filename: 'js/[hash:8].[name].js',
     path: path.resolve(__dirname, 'public/assets'),
-    publicPath: '/assets/'
+    publicPath: '/assets/',
+    chunkFilename: '[chunkhash:8].chunk.js'
   },
   module: {
     rules: [
@@ -26,7 +27,8 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              presets: ['es2015', 'react']
+              presets: ['es2015', 'react'],
+              plugins: ['syntax-dynamic-import']
             }
           }
         ]
@@ -64,7 +66,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: '../index.html',
       template: 'app/index.pug',
-      hash: true
+      hash: false
     })
   ]
 };
