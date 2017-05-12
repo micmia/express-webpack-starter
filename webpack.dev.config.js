@@ -1,18 +1,17 @@
 var path = require('path');
 var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
   entry: {
-    bundle: ['./app/index', 'webpack-hot-middleware/client', 'webpack/hot/dev-server']
+    bundle: ['./app/index', 'webpack-hot-middleware/client', 'webpack/hot/dev-server'],
+    vendor: ['react', 'redux', 'react-redux', 'font-awesome/scss/font-awesome.scss']
   },
   output: {
-    filename: 'js/[hash:8].[name].js',
+    filename: 'js/[name].[hash:8].js',
     path: path.resolve(__dirname, 'public/assets'),
-    publicPath: '/assets/',
-    chunkFilename: '[chunkhash:8].chunk.js'
+    publicPath: '/assets/'
   },
   module: {
     rules: [
@@ -63,6 +62,9 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor'
+    }),
     new HtmlWebpackPlugin({
       filename: '../index.html',
       template: 'app/index.pug',

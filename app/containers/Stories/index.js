@@ -1,11 +1,12 @@
 import React, {PureComponent} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import classNames from 'classnames';
 import {FormattedMessage} from 'react-intl';
+import {Link, withRouter} from 'react-router-dom';
+import {Button, Panel} from 'react-bootstrap';
 import * as storiesActionCreators from '../../actions/stories';
 import styles from './styles.scss';
-import Modal from './Modal';
+import FormModal from '../../components/Stories/FormModal';
 import {CREATE_STORY_SUCCESS, UPDATE_STORY_SUCCESS} from '../../constants/stories';
 
 class Stories extends PureComponent {
@@ -13,35 +14,66 @@ class Stories extends PureComponent {
     super(props);
 
     this.state = {
-      element: null
+      modal: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
+    this.handleHide = this.handleHide.bind(this);
   }
 
   componentDidMount() {
-    this.props.storiesActions.getStories();
+    const {storiesActions, history, match} = this.props;
+
+    if (!history.location.state || (history.location.state && !history.location.state.m)) {
+      storiesActions.getStories();
+    }
+
+    switch (match.path) {
+      case '/stories/new':
+        this.doEditStory();
+        break;
+
+      case '/stories/:id/edit':
+        this.doEditStory(match.params.id);
+        break;
+
+      default:
+        return;
+    }
+  }
+
+  doEditStory(id) {
+    const {storiesActions} = this.props;
+
+    storiesActions.editStory(id);
+
+    this.setState({
+      modal: true
+    });
   }
 
   handleSubmit(story) {
     const {storiesActions} = this.props;
     const save = storiesActions[story.get('_id') ? 'updateStory' : 'createStory'];
+    const _this = this;
 
     save(story.toJS()).then(function (action) {
       if (action.type === CREATE_STORY_SUCCESS || action.type === UPDATE_STORY_SUCCESS) {
         storiesActions.getStories();
       }
 
-      $('#editStoryModal').modal('hide');
+      _this.setState({
+        modal: false
+      });
     });
   }
 
-  handleEdit(i) {
-    const {storiesActions} = this.props;
+  handleHide() {
+    this.setState({
+      modal: false
+    });
 
-    storiesActions.editStory(i);
-    $('#editStoryModal').modal('show');
+    this.props.history.push('/stories', {m: true});
   }
 
   handleDelete(id) {
@@ -53,6 +85,7 @@ class Stories extends PureComponent {
   }
 
   render() {
+    const {modal} = this.state;
     const {stories} = this.props;
     const _styles = {
       card: {
@@ -63,36 +96,32 @@ class Stories extends PureComponent {
     return (
       <div className="row">
         <div className="col-sm-12" style={_styles.card}>
-          <div className={classNames('card', styles.new)} style={{padding: '10px 0'}}>
-            <div className="card-block" style={{textAlign: 'center'}} onClick={() => this.handleEdit()}>
-              <i className="fa fa-plus" aria-hidden="true" style={{fontSize: '1.5rem'}}></i>
-            </div>
-          </div>
+          <Link to='/stories/new' className={`btn btn-default ${styles.new}`}>
+            <i className="fa fa-plus" aria-hidden="true" style={{fontSize: '1.5rem'}}></i>
+          </Link>
         </div>
         {stories.map((story, i) =>
           <div className="col-sm-6" key={story.get('_id')} style={_styles.card} data-id={story.get('_id')}>
-            <div className="card">
-              <div className="card-block">
-                <h4 className="card-title">{story.get('title')}</h4>
-                <p className="card-text">{story.get('description')}</p>
-                <button className="btn btn-success" onClick={() => this.handleEdit(i)}>
-                  <FormattedMessage id="stories.card.edit"/>
-                </button>
-                &nbsp;
-                <button className="btn btn-danger" onClick={() => this.handleDelete(story.get('_id'))}>
-                  <FormattedMessage id="stories.card.delete"/>
-                </button>
-              </div>
-            </div>
+            <Panel header={<h3>{story.get('title')}</h3>}>
+              <p className="card-text">{story.get('description')}</p>
+              <Link to={{pathname: `/stories/${story.get('_id')}/edit`, state: {m: true}}}
+                    className="btn btn-success">
+                <FormattedMessage id="stories.card.edit"/>
+              </Link>
+              &nbsp;
+              <Button bsStyle="danger" onClick={() => this.handleDelete(story.get('_id'))}>
+                <FormattedMessage id="stories.card.delete"/>
+              </Button>
+            </Panel>
           </div>
         )}
-        <Modal id="editStoryModal" onSubmit={this.handleSubmit}/>
+        <FormModal show={modal} onHide={this.handleHide} onSubmit={this.handleSubmit}/>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, ownProps) => ({
   stories: state.getIn(['stories', 'items']),
   storyToEdit: state.getIn(['stories', 'itemToEdit'])
 });
@@ -101,4 +130,4 @@ const mapDispatchToProps = (dispatch) => ({
   storiesActions: bindActionCreators(storiesActionCreators, dispatch)
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Stories);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Stories));

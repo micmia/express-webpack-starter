@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
+import {Jumbotron} from 'react-bootstrap';
 
 export default class Home extends Component {
   constructor(props) {
@@ -8,7 +9,7 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div className="jumbotron">
+      <Jumbotron>
         <h1 className="display-3">Hello, world!</h1>
         <p className="lead">
           This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content
@@ -19,7 +20,7 @@ export default class Home extends Component {
         <p className="lead">
           <Link className="btn btn-primary btn-lg" to="/stories" role="button">Learn more</Link>
         </p>
-      </div>
+      </Jumbotron>
     );
   }
 };

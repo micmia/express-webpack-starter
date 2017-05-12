@@ -31,10 +31,10 @@ export function getStories() {
   }
 };
 
-export function editStory(i) {
+export function editStory(id) {
   return {
     type: EDIT_STORY,
-    payload: i
+    payload: id
   };
 }
 

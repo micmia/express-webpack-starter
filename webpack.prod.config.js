@@ -5,10 +5,11 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    bundle: ['./app/index']
+    bundle: ['./app/index'],
+    vendor: ['react', 'redux', 'react-redux', 'font-awesome/scss/font-awesome.scss']
   },
   output: {
-    filename: 'js/[name].js',
+    filename: 'js/[name].[chunkhash:8].js',
     path: path.resolve(__dirname, 'public/assets'),
     publicPath: '/assets/'
   },
@@ -49,13 +50,16 @@ module.exports = {
   },
   plugins: [
     new ExtractTextPlugin({
-      filename: 'css/[name].css',
+      filename: 'css/[name].[contenthash:8].css',
       allChunks: true
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor'
     }),
     new HtmlWebpackPlugin({
       filename: '../index.html',
       template: 'app/index.pug',
-      hash: true
+      hash: false
     })
   ]
 };

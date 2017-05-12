@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
 import {FormattedMessage} from 'react-intl';
+import {Navbar, Nav} from 'react-bootstrap';
 import {Route, Link, withRouter} from 'react-router-dom';
 
 import imgLogo from '../../images/logo.png';
@@ -19,36 +20,35 @@ class App extends PureComponent {
       <Route exact={exact} path={to} children={({match}) => (
         <li className={classNames('nav-item', {active: match})}>
           <Link className="nav-link" to={to}>{children}</Link>
-        </li>
-      )}>
+        </li>)}>
       </Route>
     );
 
     const {count} = this.props;
 
     return (<div>
-      <nav className="navbar navbar-toggleable-md navbar-light bg-faded">
-        <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-                data-target="#navbarNav">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <Link to="/" className="navbar-brand">
-          <img src={imgLogo} width="30" height="30" alt="Historia"/> Historia
-        </Link>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav mr-auto">
-            <NavItem exact to="/"><FormattedMessage id="app.nav.home"/></NavItem>
-            <NavItem exact to="/stories">
-              <FormattedMessage id="app.nav.stories"/>&nbsp;
-              {count ? <span className="badge badge-pill badge-primary">{count}</span> : ''}
-            </NavItem>
-            <NavItem exact to="/about"><FormattedMessage id="app.nav.about"/></NavItem>
-          </ul>
-        </div>
-      </nav>
+      <Navbar>
+        <Navbar.Header>
+          <Navbar.Brand>
+            <Link to="/" className="navbar-brand">
+              <img src={imgLogo} width="20" height="20" alt="Historia"/>
+            </Link>
+          </Navbar.Brand>
+        </Navbar.Header>
+        <Nav>
+          <NavItem exact to="/"><FormattedMessage id="app.nav.home"/></NavItem>
+          <NavItem exact to="/stories">
+            <FormattedMessage id="app.nav.stories"/>&nbsp;
+            {count ? <span className="badge badge-pill badge-primary">{count}</span> : ''}
+          </NavItem>
+          <NavItem exact to="/about"><FormattedMessage id="app.nav.about"/></NavItem>
+        </Nav>
+      </Navbar>
       <div className="container main">
         <Route exact path="/" render={() => <HomeContainer/>}></Route>
-        <Route path="/stories" render={() => <StoriesContainer/>}></Route>
+        <Route path="/stories" exact render={() => <StoriesContainer/>}></Route>
+        <Route path="/stories/new" exact render={() => <StoriesContainer/>}></Route>
+        <Route path="/stories/:id/edit" exact render={() => <StoriesContainer/>}></Route>
       </div>
     </div>);
   }
