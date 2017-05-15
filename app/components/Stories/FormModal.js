@@ -13,10 +13,10 @@ class FormModal extends PureComponent {
   }
 
   render() {
-    const {handleSubmit, submitting, show, onHide} = this.props;
+    const {handleSubmit, submitting, show, onHide, onExited} = this.props;
 
     return (
-      <Modal show={show} onHide={onHide}>
+      <Modal show={show} onHide={onHide} onExited={onExited}>
         <form onSubmit={handleSubmit} noValidate>
           <Modal.Header>
             <Modal.Title>

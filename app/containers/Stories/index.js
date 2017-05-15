@@ -14,17 +14,18 @@ class Stories extends PureComponent {
     super(props);
 
     this.state = {
-      modal: false
+      showModal: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleHide = this.handleHide.bind(this);
+    this.handleExit = this.handleExit.bind(this);
   }
 
   componentDidMount() {
     const {storiesActions, history, match} = this.props;
 
-    if (!history.location.state || (history.location.state && !history.location.state.m)) {
+    if (!history.location.state || history.action === 'POP' || (history.location.state && !history.location.state.m)) {
       storiesActions.getStories();
     }
 
@@ -48,7 +49,7 @@ class Stories extends PureComponent {
     storiesActions.editStory(id);
 
     this.setState({
-      modal: true
+      showModal: true
     });
   }
 
@@ -63,17 +64,21 @@ class Stories extends PureComponent {
       }
 
       _this.setState({
-        modal: false
+        showModal: false
       });
+
+      _this.props.history.replace('/stories', {m: true});
     });
   }
 
   handleHide() {
     this.setState({
-      modal: false
+      showModal: false
     });
+  }
 
-    this.props.history.push('/stories', {m: true});
+  handleExit() {
+    this.props.history.replace('/stories', {m: true});
   }
 
   handleDelete(id) {
@@ -85,7 +90,7 @@ class Stories extends PureComponent {
   }
 
   render() {
-    const {modal} = this.state;
+    const {showModal} = this.state;
     const {stories} = this.props;
     const _styles = {
       card: {
@@ -105,6 +110,7 @@ class Stories extends PureComponent {
             <Panel header={<h3>{story.get('title')}</h3>}>
               <p className="card-text">{story.get('description')}</p>
               <Link to={{pathname: `/stories/${story.get('_id')}/edit`, state: {m: true}}}
+                    replace
                     className="btn btn-success">
                 <FormattedMessage id="stories.card.edit"/>
               </Link>
@@ -115,7 +121,7 @@ class Stories extends PureComponent {
             </Panel>
           </div>
         )}
-        <FormModal show={modal} onHide={this.handleHide} onSubmit={this.handleSubmit}/>
+        <FormModal show={showModal} onHide={this.handleHide} onExited={this.handleExit} onSubmit={this.handleSubmit}/>
       </div>
     );
   }

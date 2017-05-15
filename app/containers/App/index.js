@@ -37,7 +37,7 @@ class App extends PureComponent {
         </Navbar.Header>
         <Nav>
           <NavItem exact to="/"><FormattedMessage id="app.nav.home"/></NavItem>
-          <NavItem exact to="/stories">
+          <NavItem to="/stories">
             <FormattedMessage id="app.nav.stories"/>&nbsp;
             {count ? <span className="badge badge-pill badge-primary">{count}</span> : ''}
           </NavItem>
