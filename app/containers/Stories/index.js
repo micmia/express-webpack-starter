@@ -66,8 +66,6 @@ class Stories extends PureComponent {
       _this.setState({
         showModal: false
       });
-
-      _this.props.history.replace('/stories', {m: true});
     });
   }
 
